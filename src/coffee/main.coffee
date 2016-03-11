@@ -1,7 +1,24 @@
 require '../stylus/main.styl'
 
+IMG_SIZE = 20
+
+LOGGED_IN = false
+
+MONTH_NAME = [
+  'January', 'February', 'March', 
+  'April', 'May', 'June', 
+  'July', 'August', 'Sepetember', 
+  'October', 'November', 'December'
+]
+
 getImgByDate = (month, date, commits, location) ->
-  ('./assets/images/insta_data/img_' + ~~(Math.random()*4) + '.jpg' for i in [0...commits])
+  retArr = []
+  for i in [0...commits]
+    retArr.push(
+      url: './assets/images/insta_data/img_' + ~~(Math.random() * 4) + '.jpg'
+      desc: 'blabla'
+    )
+  return retArr
 
 getCommitsByMonth = (month) ->
   [
@@ -13,36 +30,35 @@ getCommitsByMonth = (month) ->
     8, 9, 11, 12, 13
   ]
 
-IMG_SIZE = 20
-CUR_YEAR = 2016
-
-MONTH_NAME = [
-  'January', 'February', 'March', 
-  'April', 'May', 'June', 
-  'July', 'August', 'Sepetember', 
-  'October', 'November', 'December'
-]
-
 $(() ->
+  $('.img-fullscreen').on('click', () -> $('.img-fullscreen').fadeOut('fast'))
+  if !LOGGED_IN 
+    $('.view-login').show()
+  else
+    $('.view-login').hide()
+
   displayMonth = new Date().getMonth()+1
-  refreshUIByMonth(displayMonth)
+  displayYear = 2016
+  refreshUIByMonth(displayMonth, displayYear)
 
   $('#prev').on('click', () ->
-    displayMonth -= 1
-    if (displayMonth < 0)
+    if displayMonth <= 1
       displayMonth = 11
-      CUR_YEAR -= 1
-    refreshUIByMonth(displayMonth))
+      displayYear -= 1
+    else
+      displayMonth -= 1
+    refreshUIByMonth(displayMonth, displayYear))
 
   $('#next').on('click', () ->
-    displayMonth += 1
-    if (displayMonth >= 12)
+    if displayMonth >= 11
       displayMonth = 0
-      CUR_YEAR += 1
-    refreshUIByMonth(displayMonth))
+      displayYear += 1
+    else
+      displayMonth += 1
+    refreshUIByMonth(displayMonth, displayYear))
 )
 
-refreshUIByMonth = (curMonth) ->
+refreshUIByMonth = (curMonth, curYear) ->
   commitsInDay = getCommitsByMonth(curMonth)
   daysInCurMonth = commitsInDay.length
   xLen = parseInt($('.main-insta-view').css('width'))
@@ -61,12 +77,21 @@ refreshUIByMonth = (curMonth) ->
               $('.bg-insta-info').fadeOut(100, () ->
                 $('.bg-insta-info').css('backgroundImage', $(e.target).css('backgroundImage'))
                 $('.bg-insta-info').fadeIn(100))
+          ,
+          click: (e) ->
+            $('.img-fullscreen img')
+              .attr('src', $(e.target).css('backgroundImage').replace('url(\"', '').replace('\")', ''))
+            $('.img-fullscreen p')
+              .text($(e.target).data('desc'))
+            $('.img-fullscreen').fadeIn('fast')
         })
         .css({
           'bottom': j * (IMG_SIZE + yItv),
           'left': i * xItv,
-          'backgroundImage': 'url(\'' + imgForToday[j] + '\')'
+          'backgroundImage': 'url(\'' + imgForToday[j].url + '\')'
         })
+        .data('desc', imgForToday[j].desc)
+        .attr('alt', imgForToday[j].desc)
         .appendTo($('.main-insta-view'))
 
   for i in [0...daysInCurMonth]
@@ -80,4 +105,4 @@ refreshUIByMonth = (curMonth) ->
       })
       .appendTo($('.axis-info'))
 
-  $('.month-label').text(MONTH_NAME[curMonth] + ', ' + CUR_YEAR)
+  $('.month-label').text(MONTH_NAME[curMonth] + ', ' + curYear)
