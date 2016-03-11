@@ -1,2 +1,44 @@
 @import 'nib'
 global-reset()
+
+body
+  background-color #eee
+  font-family Avenir, 'Lato', sans-serif
+  size 12px
+  color #666
+  
+.bg-insta-info
+  width 100vw
+  height 100vh
+  // background-image url('./assets/images/sample_insta.jpg')
+  background-position center
+  background-size auto 100%
+  background-repeat no-repeat
+  &:after
+    content ''
+    display block
+    width 100vw
+    height 100vh
+    background-color rgba(255,255,255,.6)
+
+.main-insta-view
+  width 80vw
+  min-width 800px
+  height 70vh
+  position absolute
+  top 40%
+  left 50%
+  transform translate(-50%, -50%)
+  // background-color rgba(255,255,255,.8)
+
+.insta-img
+  background-size 100%
+  cursor pointer
+  width 20px
+  height 20px
+  transition transform .2s
+  position absolute
+  border 1px solid rgba(0,0,0,.2)
+  &:hover
+    transform translateY(-2px)
+  
