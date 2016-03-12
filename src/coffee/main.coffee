@@ -73,7 +73,6 @@ startTypingAnimation = () ->
   , 800)
   type(0, getRandomCaption())
 
-
 getRandomCaption = () ->
   CAPTION_PREFIX + CAPTION_SUFFIX[~~(Math.random()*CAPTION_SUFFIX.length)]
 
@@ -124,7 +123,7 @@ $(() ->
         # console.log authData
         dataRef = new Firebase "https://radiant-heat-702.firebaseio.com/#{authData.github.username}"
         dataRef.once 'value', (e) ->
-          prepareUserData(e.val());
+          prepareUserData(e.val())
           $('.view-login').fadeOut('fast')
           refreshUIByMonth(displayMonth, displayYear)
   )
@@ -152,39 +151,35 @@ refreshUIByMonth = (curMonth, curYear) ->
   for i in [0...daysInCurMonth]
     imgForToday = getImgByDate(curMonth, i, commitsInDay[i])
     for j in [0...Math.min(commitsInDay[i], maxImgPerDay)]
-      $('<div />', {
-          'class': 'insta-img',
-          mouseover: (e) ->
-            if ($('.bg-insta-info').css('backgroundImage') != $(e.target).css('backgroundImage'))
-              $('.bg-insta-info').fadeOut(100, () ->
-                $('.bg-insta-info').css('backgroundImage', $(e.target).css('backgroundImage'))
-                $('.bg-insta-info').fadeIn(100))
-          ,
-          click: (e) ->
-            $('.img-fullscreen img')
-              .attr('src', $(e.target).css('backgroundImage').replace('url(\"', '').replace('\")', ''))
-            $('.img-fullscreen p')
-              .text($(e.target).data('desc'))
-            $('.img-fullscreen').fadeIn('fast')
-        })
-        .css({
-          'bottom': j * (IMG_SIZE + yItv),
-          'left': i * xItv,
-          'backgroundImage': 'url(\'' + imgForToday[j].url + '\')'
-        })
-        .data('desc', imgForToday[j].desc)
-        .attr('alt', imgForToday[j].desc)
-        .appendTo($('.main-insta-view'))
+      $ '<div />',
+        class: 'insta-img',
+        mouseover: (e) ->
+          return if ($('.bg-insta-info').css('backgroundImage') is $(e.target).css('backgroundImage'))
+
+          $('.bg-insta-info').fadeOut 100, () ->
+            $('.bg-insta-info').css('backgroundImage', $(e.target).css('backgroundImage'))
+            $('.bg-insta-info').fadeIn(100)
+        click: (e) ->
+          $('.img-fullscreen img')
+            .attr('src', $(e.target).css('backgroundImage').replace('url(\"', '').replace('\")', ''))
+          $('.img-fullscreen p')
+            .text($(e.target).data('desc'))
+          $('.img-fullscreen').fadeIn('fast')
+      .css
+        bottom: j * (IMG_SIZE + yItv)
+        left: i * xItv
+        backgroundImage: 'url(\'' + imgForToday[j].url + '\')'
+      .data 'desc', imgForToday[j].desc
+      .attr 'alt', imgForToday[j].desc
+      .appendTo $('.main-insta-view')
 
   for i in [0...daysInCurMonth]
-    $('<div />', {
-        'class': 'date-label',
-        text: i + 1
-      })
-      .css({
-        'top': 0,
-        'left': i * xItv,
-      })
-      .appendTo($('.axis-info'))
+    $ '<div />',
+      class: 'date-label'
+      text: i + 1
+    .css
+      'top': 0
+      'left': i * xItv
+    .appendTo $('.axis-info')
 
-  $('.month-label').text(MONTH_NAME[curMonth] + ', ' + curYear)
+  $('.month-label').text "#{MONTH_NAME[curMonth]}, #{curYear}"
