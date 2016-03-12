@@ -32,14 +32,6 @@ getCommitsByMonth = (month) ->
 
 $(() ->
   $('.img-fullscreen').on('click', () -> $('.img-fullscreen').fadeOut('fast'))
-  if !LOGGED_IN 
-    $('.view-login').show()
-  else
-    $('.view-login').hide()
-
-  displayMonth = new Date().getMonth()+1
-  displayYear = 2016
-  refreshUIByMonth(displayMonth, displayYear)
 
   $('#prev').on('click', () ->
     if displayMonth <= 1
@@ -56,6 +48,15 @@ $(() ->
     else
       displayMonth += 1
     refreshUIByMonth(displayMonth, displayYear))
+
+  if !LOGGED_IN 
+    $('.view-login').show()
+  else
+    $('.view-login').hide()
+    displayMonth = new Date().getMonth()+1
+    displayYear = 2016
+    refreshUIByMonth(displayMonth, displayYear)
+
 )
 
 refreshUIByMonth = (curMonth, curYear) ->
