@@ -4,10 +4,12 @@ IMG_SIZE = 20
 
 LOGGED_IN = false
 
+USER_DATA = []
+
 MONTH_NAME = [
-  'January', 'February', 'March', 
-  'April', 'May', 'June', 
-  'July', 'August', 'Sepetember', 
+  'January', 'February', 'March',
+  'April', 'May', 'June',
+  'July', 'August', 'Sepetember',
   'October', 'November', 'December'
 ]
 
@@ -21,43 +23,9 @@ getImgByDate = (month, date, commits, location) ->
   return retArr
 
 getCommitsByMonth = (month) ->
-  [
-    20, 2, 0, 0, 0,
-    2, 3, 0, 0, 0,
-    12, 10, 11, 12, 8,
-    10, 23, 2, 7, 2,
-    3, 5, 11, 12, 30,
-    8, 9, 11, 12, 13
-  ]
 
-startTypingAnimation = () ->
-  setInterval(() ->
-    $('#cursor').animate({opacity: 0}, 'fast').animate({opacity: 1}, 'fast')
-  , 800)
-  type(0, getRandomCaption())
-
-CAPTION_PREFIX = 'WHAT<span style=\'color:#aaa\'>YOU</span>V<br/>E<span style=\'color:#aaa\'>MISSED</span>W<br/>HEN<span style=\'color:#aaa\'>YOU</span>AR<br/>E'
-CAPTION_SUFFIX = ['DEBUGGING.', 'CODING.', 'PROGRAMMING.', 'WORKING.', 'CHILLING.']
-
-getRandomCaption = () ->
-  CAPTION_PREFIX + CAPTION_SUFFIX[~~(Math.random()*CAPTION_SUFFIX.length)]
-
-type = (captionLength, caption) ->
-  $('.caption').html(caption.substr(0, captionLength))
-  nextChar = caption.charAt(++captionLength)
-  while captionLength < caption.length && !(nextChar.match(/[A-Z.]/))
-    nextChar = caption.charAt(++captionLength)
-  setTimeout((if captionLength < caption.length + 1 then type else erase), 60, captionLength, caption)
-
-erase = (captionLength, caption) ->
-  $('.caption').html(caption.substr(0, captionLength--))
-  if (captionLength > caption.indexOf('AR<br/>E') + 8)
-    setTimeout(erase, 60, captionLength, caption)
-  else
-    setTimeout(type, 60, captionLength, getRandomCaption())
 
 $(() ->
-  startTypingAnimation()
   $('.img-fullscreen').on('click', () -> $('.img-fullscreen').fadeOut('fast'))
 
   # Default: current month
@@ -86,9 +54,11 @@ $(() ->
       if error
         alert "Login Failed!", error
       else
-        # console.log authData
-        $('.view-login').fadeOut('fast')
-        refreshUIByMonth(displayMonth, displayYear)
+        dataRef = new Firebase "https://radiant-heat-702.firebaseio.com/#{authData.github.username}"
+        dataRef.once 'value', (e) ->
+          USER_DATA = e.val()
+          $('.view-login').fadeOut('fast')
+          refreshUIByMonth(displayMonth, displayYear)
   )
 )
 
@@ -109,7 +79,7 @@ refreshUIByMonth = (curMonth, curYear) ->
     for j in [0...Math.min(commitsInDay[i], maxImgPerDay)]
       $('<div />', {
           'class': 'insta-img',
-          mouseover: (e) -> 
+          mouseover: (e) ->
             if ($('.bg-insta-info').css('backgroundImage') != $(e.target).css('backgroundImage'))
               $('.bg-insta-info').fadeOut(100, () ->
                 $('.bg-insta-info').css('backgroundImage', $(e.target).css('backgroundImage'))
