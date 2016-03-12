@@ -10,8 +10,12 @@
   "description": "",
   "devDependencies": {
     "chai": "^3.5.0",
+    "firebase": "^2.4.1",
+    "github": "^0.2.4",
     "gulp-mocha": "^2.2.0",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "node-github": "0.0.3",
+    "request": "^2.69.0"
   },
   "dependencies": {
     "coffee-loader": "^0.7.2",
