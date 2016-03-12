@@ -30,7 +30,34 @@ getCommitsByMonth = (month) ->
     8, 9, 11, 12, 13
   ]
 
+startTypingAnimation = () ->
+  setInterval(() ->
+    $('#cursor').animate({opacity: 0}, 'fast').animate({opacity: 1}, 'fast')
+  , 800)
+  type(0, getRandomCaption())
+
+CAPTION_PREFIX = 'WHAT<span style=\'color:#aaa\'>YOU</span>V<br/>E<span style=\'color:#aaa\'>MISSED</span>W<br/>HEN<span style=\'color:#aaa\'>YOU</span>AR<br/>E'
+CAPTION_SUFFIX = ['DEBUGGING.', 'CODING.', 'PROGRAMMING.', 'WORKING.', 'CHILLING.']
+
+getRandomCaption = () ->
+  CAPTION_PREFIX + CAPTION_SUFFIX[~~(Math.random()*CAPTION_SUFFIX.length)]
+
+type = (captionLength, caption) ->
+  $('.caption').html(caption.substr(0, captionLength))
+  nextChar = caption.charAt(++captionLength)
+  while captionLength < caption.length && !(nextChar.match(/[A-Z.]/))
+    nextChar = caption.charAt(++captionLength)
+  setTimeout((if captionLength < caption.length + 1 then type else erase), 60, captionLength, caption)
+
+erase = (captionLength, caption) ->
+  $('.caption').html(caption.substr(0, captionLength--))
+  if (captionLength > caption.indexOf('AR<br/>E') + 8)
+    setTimeout(erase, 60, captionLength, caption)
+  else
+    setTimeout(type, 60, captionLength, getRandomCaption())
+
 $(() ->
+  startTypingAnimation()
   $('.img-fullscreen').on('click', () -> $('.img-fullscreen').fadeOut('fast'))
 
   # Default: current month

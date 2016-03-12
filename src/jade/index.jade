@@ -2,7 +2,7 @@ include template/_mixins.jade
 extends template/_default.jade
 
 block append css
-  +ex_css('http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext')
+  +ex_css('//cdn.jsdelivr.net/font-hack/2.019/css/hack.min.css')
 block append hjs
   +ex_js('https://cdn.firebase.com/js/client/2.4.1/firebase.js')
   +ex_js('https://code.jquery.com/jquery-2.2.1.min.js')
@@ -22,7 +22,9 @@ block contents
     p 
   .view-login
     .form-wrapper
-      img.logo(src='./assets/images/logo.png')
+      .title-anim
+        span.caption
+        span#cursor |
       .btn-login 
         span.fa.fa-github
         span Login with GitHub
