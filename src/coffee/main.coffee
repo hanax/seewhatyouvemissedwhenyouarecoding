@@ -33,6 +33,10 @@ getCommitsByMonth = (month) ->
 $(() ->
   $('.img-fullscreen').on('click', () -> $('.img-fullscreen').fadeOut('fast'))
 
+  # Default: current month
+  displayMonth = new Date().getMonth()+1
+  displayYear = 2016
+
   $('#prev').on('click', () ->
     if displayMonth <= 1
       displayMonth = 11
@@ -49,17 +53,22 @@ $(() ->
       displayMonth += 1
     refreshUIByMonth(displayMonth, displayYear))
 
-  if !LOGGED_IN 
-    $('.view-login').show()
-  else
-    $('.view-login').hide()
-    displayMonth = new Date().getMonth()+1
-    displayYear = 2016
-    refreshUIByMonth(displayMonth, displayYear)
-
+  ref = new Firebase 'https://radiant-heat-702.firebaseio.com'
+  $('.btn-login').on('click', () ->
+    ref.authWithOAuthPopup 'github', (error, authData) ->
+      if error
+        alert "Login Failed!", error
+      else
+        # console.log authData
+        $('.view-login').fadeOut('fast')
+        refreshUIByMonth(displayMonth, displayYear)
+  )
 )
 
 refreshUIByMonth = (curMonth, curYear) ->
+  $('.insta-img').remove()
+  $('.date-label').remove()
+
   commitsInDay = getCommitsByMonth(curMonth)
   daysInCurMonth = commitsInDay.length
   xLen = parseInt($('.main-insta-view').css('width'))
