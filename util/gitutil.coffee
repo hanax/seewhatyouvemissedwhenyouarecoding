@@ -26,6 +26,13 @@ github.repos.getFromUser {user: handle}, (err, data) ->
   repos.forEach (rep) ->
     github.repos.getStatsCommitActivity {user: handle, repo: rep}, (err, data) ->
       throw Error err if err
+      unless Array.isArray data
+        ++count
+        if count is len
+          ref = new Firebase "https://radiant-heat-702.firebaseio.com/#{handle}"
+          ref.set arr
+          console.log arr.reduce (p, c) -> p + c
+        return
       whole = data.reduce(((p, c) -> p.concat c.days), [])
       whole.forEach (e, i) ->
         arr[i] += e
