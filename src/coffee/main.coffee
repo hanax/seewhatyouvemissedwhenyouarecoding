@@ -24,19 +24,44 @@ CAPTION_SUFFIX = [
   'CHILLING.'
 ]
 commits = []
+photos = []
 upperBoundYear = 0
 upperBoundMonth = 0
 lowerBoundYear = 0
 lowerBoundMonth = 0
 
-getImgByDate = (month, date, commits, location) ->
-  retArr = []
-  for i in [0...commits]
-    retArr.push(
-      url: './assets/images/insta_data/img_' + ~~(Math.random() * 4) + '.jpg'
-      desc: 'blabla'
-    )
-  return retArr
+fetchImgFromLocal = (month, date, commits, cb) ->
+  arr = photos[month][date][0...commits]
+  cb arr.map (e) ->
+    {desc: e.desc, url: e.urls[e.urls.length-1], sUrl: e.urls[0]}
+
+getImgByDate = (month, date, commits, location, cb) ->
+  if photos[month]? and photos[month][date]?
+    fetchImgFromLocal month, date, commits, cb
+    return
+  if commits is 0
+    cb []
+    return
+
+  photoRef = new Firebase "https://radiant-heat-702.firebaseio.com/photos/#{month}-#{date}"
+
+  photoRef.once 'value', (e) ->
+    resArray = []
+    val = e.val()
+    for k, v of val
+      resArray.push v
+    photos[month] ||= []
+    photos[month][date] = resArray || []
+
+    # fake data if not available on flicr
+    if photos[month][date].length is 0
+      retArr = Util.arr commits, () ->
+        str = "./assets/images/insta_data/img_#{~~(Math.random()*4)}.jpg"
+        urls: [str, str]
+        desc: 'This is ART!'
+      photos[month][date] = retArr
+
+    fetchImgFromLocal month, date, commits, cb
 
 prepareUserData = (data) ->
   daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31]
@@ -90,7 +115,7 @@ erase = (captionLength, caption) ->
   else
     setTimeout(type, 60, captionLength, getRandomCaption())
 
-$(() ->
+$ () ->
   startTypingAnimation()
   $('.img-fullscreen').on('click', () -> $('.img-fullscreen').fadeOut('fast'))
 
@@ -115,7 +140,7 @@ $(() ->
     refreshUIByMonth(displayMonth, displayYear))
 
   ref = new Firebase 'https://radiant-heat-702.firebaseio.com'
-  $('.btn-login').on('click', () ->
+  $('.btn-login').on 'click', () ->
     ref.authWithOAuthPopup 'github', (error, authData) ->
       if error
         alert "Login Failed!", error
@@ -126,8 +151,6 @@ $(() ->
           prepareUserData(e.val())
           $('.view-login').fadeOut('fast')
           refreshUIByMonth(displayMonth, displayYear)
-  )
-)
 
 refreshUIByMonth = (curMonth, curYear) ->
   $('#prev').css 'visibility', 'visible'
@@ -148,30 +171,34 @@ refreshUIByMonth = (curMonth, curYear) ->
   yItv = 5
   maxImgPerDay = ~~(yLen / (IMG_SIZE + yItv))
 
-  for i in [0...daysInCurMonth]
-    imgForToday = getImgByDate(curMonth, i, commitsInDay[i])
-    for j in [0...Math.min(commitsInDay[i], maxImgPerDay)]
-      $ '<div />',
-        class: 'insta-img',
-        mouseover: (e) ->
-          return if ($('.bg-insta-info').css('backgroundImage') is $(e.target).css('backgroundImage'))
+  for _i in [0...daysInCurMonth]
+    do ->
+      i = _i
+      getImgByDate curMonth, i, commitsInDay[i], 'NY', (imgForToday) ->
+        for j in [0...Math.min(commitsInDay[i], maxImgPerDay)]
+          $ '<div />',
+            class: 'insta-img',
+            mouseover: (e) ->
+              return if ($('.bg-insta-info').css('backgroundImage') is $(e.target).data 'bgExUrl')
 
-          $('.bg-insta-info').fadeOut 100, () ->
-            $('.bg-insta-info').css('backgroundImage', $(e.target).css('backgroundImage'))
-            $('.bg-insta-info').fadeIn(100)
-        click: (e) ->
-          $('.img-fullscreen img')
-            .attr('src', $(e.target).css('backgroundImage').replace('url(\"', '').replace('\")', ''))
-          $('.img-fullscreen p')
-            .text($(e.target).data('desc'))
-          $('.img-fullscreen').fadeIn('fast')
-      .css
-        bottom: j * (IMG_SIZE + yItv)
-        left: i * xItv
-        backgroundImage: 'url(\'' + imgForToday[j].url + '\')'
-      .data 'desc', imgForToday[j].desc
-      .attr 'alt', imgForToday[j].desc
-      .appendTo $('.main-insta-view')
+              $('.bg-insta-info').fadeOut 100, () ->
+                $('.bg-insta-info').css('backgroundImage', $(e.target).data 'bgExUrl' )
+                $('.bg-insta-info').fadeIn(100)
+            click: (e) ->
+              $('.img-fullscreen img')
+                .attr('src', $(e.target).data('bgUrl'))
+              $('.img-fullscreen p')
+                .text($(e.target).data('desc'))
+              $('.img-fullscreen').fadeIn('fast')
+          .css
+            bottom: j * (IMG_SIZE + yItv)
+            left: i * xItv
+            backgroundImage: "url('#{imgForToday[j].sUrl}')"
+          .data 'desc', imgForToday[j].desc
+          .data 'bgUrl', imgForToday[j].url
+          .data 'bgExUrl', "url('#{imgForToday[j].url}')"
+          .attr 'alt', imgForToday[j].desc
+          .appendTo $('.main-insta-view')
 
   for i in [0...daysInCurMonth]
     $ '<div />',
