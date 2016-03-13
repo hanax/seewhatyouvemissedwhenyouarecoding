@@ -30,6 +30,8 @@ See what's going on in the world while you are coding and making commits to GitH
 
 ## Local deployment
 ```
+# Install the required package
+npm install
 # Compile the source code and serve on http://localhost:5000
 gulp serve
 ```
