@@ -14,8 +14,7 @@ MONTH_NAME = [
 CAPTION_PREFIX = '''
 WHAT<span style=\'color:#aaa\'>YOU</span>V<br/>
 E<span style=\'color:#aaa\'>MISSED</span>W<br/>
-HEN<span style=\'color:#aaa\'>YOU</span>AR<br/>
-E'''
+HEN<span style=\'color:#aaa\'>YOU</span>AR<br/>E'''
 CAPTION_SUFFIX = [
   'DEBUGGING.'
   'CODING.'
