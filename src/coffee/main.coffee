@@ -31,7 +31,7 @@ lowerBoundYear = 0
 lowerBoundMonth = 0
 
 fetchImgFromLocal = (month, date, commits, cb) ->
-  arr = photos[month][date][0...commits]
+  arr = Util.shuffle(photos[month][date])[0...commits]
   cb arr.map (e) ->
     {desc: e.desc, url: e.urls[e.urls.length-1], sUrl: e.urls[0]}
 
@@ -171,34 +171,32 @@ refreshUIByMonth = (curMonth, curYear) ->
   yItv = 5
   maxImgPerDay = ~~(yLen / (IMG_SIZE + yItv))
 
-  for _i in [0...daysInCurMonth]
-    do ->
-      i = _i
-      getImgByDate curMonth, i, commitsInDay[i], 'NY', (imgForToday) ->
-        for j in [0...Math.min(commitsInDay[i], maxImgPerDay)]
-          $ '<div />',
-            class: 'insta-img',
-            mouseover: (e) ->
-              return if ($('.bg-insta-info').css('backgroundImage') is $(e.target).data 'bgExUrl')
+  [0...daysInCurMonth].forEach (i) ->
+    getImgByDate curMonth, i+1, commitsInDay[i], 'NY', (imgForToday) ->
+      for j in [0...Math.min(commitsInDay[i], maxImgPerDay)]
+        $ '<div />',
+          class: 'insta-img',
+          mouseover: (e) ->
+            return if ($('.bg-insta-info').css('backgroundImage') is $(e.target).data 'bgExUrl')
 
-              $('.bg-insta-info').fadeOut 100, () ->
-                $('.bg-insta-info').css('backgroundImage', $(e.target).data 'bgExUrl' )
-                $('.bg-insta-info').fadeIn(100)
-            click: (e) ->
-              $('.img-fullscreen img')
-                .attr('src', $(e.target).data('bgUrl'))
-              $('.img-fullscreen p')
-                .text($(e.target).data('desc'))
-              $('.img-fullscreen').fadeIn('fast')
-          .css
-            bottom: j * (IMG_SIZE + yItv)
-            left: i * xItv
-            backgroundImage: "url('#{imgForToday[j].sUrl}')"
-          .data 'desc', imgForToday[j].desc
-          .data 'bgUrl', imgForToday[j].url
-          .data 'bgExUrl', "url('#{imgForToday[j].url}')"
-          .attr 'alt', imgForToday[j].desc
-          .appendTo $('.main-insta-view')
+            $('.bg-insta-info').fadeOut 100, () ->
+              $('.bg-insta-info').css('backgroundImage', $(e.target).data 'bgExUrl' )
+              $('.bg-insta-info').fadeIn(100)
+          click: (e) ->
+            $('.img-fullscreen img')
+              .attr('src', $(e.target).data('bgUrl'))
+            $('.img-fullscreen p')
+              .text($(e.target).data('desc'))
+            $('.img-fullscreen').fadeIn('fast')
+        .css
+          bottom: j * (IMG_SIZE + yItv)
+          left: i * xItv
+          backgroundImage: "url('#{imgForToday[j].sUrl}')"
+        .data 'desc', imgForToday[j].desc
+        .data 'bgUrl', imgForToday[j].url
+        .data 'bgExUrl', "url('#{imgForToday[j].url}')"
+        .attr 'alt', imgForToday[j].desc
+        .appendTo $('.main-insta-view')
 
   for i in [0...daysInCurMonth]
     $ '<div />',
