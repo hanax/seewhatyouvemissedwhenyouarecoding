@@ -5,15 +5,15 @@ option =
   api_key: '7706a7c56a39a074d581c3b69581d2fa'
   secret: '8f8cd52dd2e45ebc'
 
-count = 364
+count = 100
 
 Flickr.tokenOnly option, (error, flickr) ->
   throw Error error if error
-  searchAndStore new Date(), flickr
+  searchAndStore new Date(2015,11,13), flickr
 
 
 searchAndStore = (date, flickr) ->
-  startD = new Date(2016,1,3)
+  startD = new Date(date)
   console.log "searching... #{startD.toString()}"
 
   m = startD.getMonth()
@@ -29,8 +29,9 @@ searchAndStore = (date, flickr) ->
 
   flickr.photos.search searchOptions, (err, data) ->
     throw Error err if err
-    photoCount = data.photos.photo.length
-    data.photos.photo.forEach (p) ->
+    photos = data.photos.photo
+    photoCount = if photos.length < 50 then photos.length else 50
+    photos[0...50].forEach (p) ->
       flickr.photos.getSizes {photo_id: p.id}, (errr, data) ->
         if errr
           console.log errr
@@ -39,7 +40,7 @@ searchAndStore = (date, flickr) ->
               searchAndStore date - 1000*60*60*24, flickr
           return
 
-        arr = data.sizes.size[0...100]
+        arr = data.sizes.size
         ref = new Firebase "https://radiant-heat-702.firebaseio.com/photos/#{m}-#{d}"
         ref.push
           desc: p.title
