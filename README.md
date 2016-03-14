@@ -1,7 +1,7 @@
 # INFO 5302 Assignment 1 Social Explorer
 <img src='http://hanax.github.io/whatyouvemissedwhenyouarecoding/assets/images/logo.png' width='200px'/>
 
-http://hanax.co/whatyouvemissedwhenyouarecoding
+http://hanax.github.io/whatyouvemissedwhenyouarecoding
 
 Made by [Thomas Yang](http://thomas-yang.me) and [Hannah Xue](http://hanax.co)
 
