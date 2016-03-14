@@ -1,5 +1,5 @@
 # INFO 5302 Assignment 1 Social Explorer
-<img src='http://hanax.co/whatyouvemissedwhenyouarecoding/assets/images/logo.png' width='200px'/>
+<img src='http://hanax.github.io/whatyouvemissedwhenyouarecoding/assets/images/logo.png' width='200px'/>
 
 http://hanax.co/whatyouvemissedwhenyouarecoding
 
