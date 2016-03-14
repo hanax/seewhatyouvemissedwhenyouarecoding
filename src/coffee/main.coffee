@@ -138,23 +138,18 @@ $ () ->
       displayMonth += 1
     refreshUIByMonth(displayMonth, displayYear))
 
-  dataRef = new Firebase "https://radiant-heat-702.firebaseio.com/hanax"
-  dataRef.once 'value', (e) ->
-    prepareUserData(e.val())
-    refreshUIByMonth(displayMonth, displayYear)
-
-  # ref = new Firebase 'https://radiant-heat-702.firebaseio.com'
-  # $('.btn-login').on 'click', () ->
-  #   ref.authWithOAuthPopup 'github', (error, authData) ->
-  #     if error
-  #       alert "Login Failed!", error
-  #     else
-  #       # console.log authData
-  #       dataRef = new Firebase "https://radiant-heat-702.firebaseio.com/#{authData.github.username}"
-  #       dataRef.once 'value', (e) ->
-  #         prepareUserData(e.val())
-  #         $('.view-login').fadeOut('fast')
-  #         refreshUIByMonth(displayMonth, displayYear)
+  ref = new Firebase 'https://radiant-heat-702.firebaseio.com'
+  $('.btn-login').on 'click', () ->
+    ref.authWithOAuthPopup 'github', (error, authData) ->
+      if error
+        alert "Login Failed!", error
+      else
+        # console.log authData
+        dataRef = new Firebase "https://radiant-heat-702.firebaseio.com/#{authData.github.username}"
+        dataRef.once 'value', (e) ->
+          prepareUserData(e.val())
+          $('.view-login').fadeOut('fast')
+          refreshUIByMonth(displayMonth, displayYear)
 
 refreshUIByMonth = (curMonth, curYear) ->
   $('#prev').css 'visibility', 'visible'
