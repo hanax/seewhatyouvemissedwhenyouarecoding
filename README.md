@@ -6,11 +6,11 @@ http://hanax.co/whatyouvemissedwhenyouarecoding
 Made by [Thomas Yang](http://thomas-yang.me) and [Hannah Xue](http://hanax.co)
 
 ## What this is about
-See what's going on in the world while you are coding and making commits to GitHub. We tried to make some crazy coders reflect more on how much beauty they have missed through mindblowing visuals (beautiful photos, floating descriptions, etc).
+See what's going on in the world while you are coding and making commits to GitHub. We tried to make some crazy coders reflect more on how much beauty they have missed when coding, through beautiful visuals (fullscreen photos, floating descriptions, animations, etc).
 * Login with your GitHub account.
 * Visualize your GitHub daily commits by month.
 * Browse Flickr photos, taken exactly at when and where you made each commit. 
-  * The number of the photos correlated with commit number.
+  * The number of the stacked photos correlated with daily commit number.
 * Hovering on pictures for previewing, and clicking for details.
 
 ## Requirements details
@@ -26,9 +26,9 @@ See what's going on in the world while you are coding and making commits to GitH
 ![hanax](http://hanax.github.io/whatyouvemissedwhenyouarecoding/assets/readme_files/hanax.jpg)
 
 ## Technical details
-* CoffeeScript / JavaScript / Node.js / Firebase / various other web techniques (webpack, gulp, jade, stylus, etc)
+* CoffeeScript / JavaScript / Node.js / Firebase / various other web techniques (webpack, gulp, jade, stylus, jQuery, etc)
 * Open-source API wrapper on Node.js: [node-flickrapi](https://github.com/Pomax/node-flickrapi) / [node-github](https://github.com/mikedeboer/node-github)
-* All code in this repo are original.
+* **All code** in this repo are original.
 
 ## Local deployment
 ```sh
