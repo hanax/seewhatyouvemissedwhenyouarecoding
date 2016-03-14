@@ -44,6 +44,13 @@ handle = [
   'taylorotwell'
   'yeehanchan'
   'zaidhaque'
+  'omris1'
+  'copila'
+  'praveen-g'
+  'bc564'
+  'bplaster'
+  'hsiaoching'
+  'xyilinu'
 ]
 count = 0
 sum = handle.length
