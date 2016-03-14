@@ -1,7 +1,7 @@
 # INFO 5302 Assignment 1 Social Explorer
-<img src='http://hanax.co/whatyouvemissedwhenyouarecoding/assets/images/logo.png' width='200px'/>
+<img src='http://hanax.github.io/whatyouvemissedwhenyouarecoding/assets/images/logo.png' width='200px'/>
 
-http://hanax.co/whatyouvemissedwhenyouarecoding
+http://hanax.github.io/whatyouvemissedwhenyouarecoding
 
 Made by [Thomas Yang](http://thomas-yang.me) and [Hannah Xue](http://hanax.co)
 
@@ -18,11 +18,11 @@ See what's going on in the world while you are coding and making commits to GitH
 * Data scale: Any user can login with their GitHub account. 
 * We tried public data from the popular GitHub account [taylorotwell](http://github.com/taylorotwell) who has around 7k commits in the past year and a screenshot of results are shown below:
 
-![taylorotwell](http://hanax.co/whatyouvemissedwhenyouarecoding/assets/readme_files/taylorotwell.jpg)
+![taylorotwell](http://hanax.github.io/whatyouvemissedwhenyouarecoding/assets/readme_files/taylorotwell.jpg)
 
 * A screenshot of the results of [Hannah Xue](http://github.com/hanax) who has around 700 commits in the past year are as below:
 
-![hanax](http://hanax.co/whatyouvemissedwhenyouarecoding/assets/readme_files/hanax.jpg)
+![hanax](http://hanax.github.io/whatyouvemissedwhenyouarecoding/assets/readme_files/hanax.jpg)
 
 ## Technical details
 * CoffeeScript(JavaScript) / Node.js / various other web techniques (gulp, jade, stylus, etc)
