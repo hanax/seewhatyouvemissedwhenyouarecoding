@@ -55,7 +55,7 @@ getImgByDate = (month, date, commits, location, cb) ->
     # fake data if not available on flicr
     if photos[month][date].length is 0
       retArr = Util.arr commits, () ->
-        str = "./assets/images/insta_data/img_#{~~(Math.random()*4)}.jpg"
+        str = "./assets/images/insta_data/img_#{~~(Math.random()*9)}.jpg"
         urls: [str, str]
         desc: 'This is ART!'
       photos[month][date] = retArr
