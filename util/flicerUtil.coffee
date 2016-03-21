@@ -5,11 +5,11 @@ option =
   api_key: '7706a7c56a39a074d581c3b69581d2fa'
   secret: '8f8cd52dd2e45ebc'
 
-count = 100
+count = 1
 
 Flickr.tokenOnly option, (error, flickr) ->
   throw Error error if error
-  searchAndStore new Date(2015,11,13), flickr
+  searchAndStore new Date(2016,2,15), flickr
 
 
 searchAndStore = (date, flickr) ->

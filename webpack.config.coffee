@@ -47,6 +47,6 @@ module.exports =
         paths: [__dirname + '/src']
         limit: false
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin()
     new webpack.BannerPlugin(banner)
   ]
