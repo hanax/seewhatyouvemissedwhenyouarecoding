@@ -20,7 +20,8 @@ CAPTION_SUFFIX = [
   'CODING.'
   'PROGRAMMING.'
   'WORKING.'
-  'CHILLING.'
+  'CHILLING...'
+  'HACKING.'
 ]
 
 commits = []

@@ -7,6 +7,13 @@ body
   font-family Hack, Helvetica, Arial, sans-serif
   size 12px
   color #333
+
+a
+  text-decoration none
+  color #999
+  transition all .3s
+  &:hover
+    color #000
   
 .bg-insta-info
   width 100vw
@@ -106,6 +113,8 @@ body
       display block
       height 200px
       width 200px
+      padding-left 28px
+      letter-spacing 1px
       margin-left auto
       margin-right auto
       font-size 30px
@@ -113,7 +122,7 @@ body
       margin-left auto
       margin-right auto
       display block
-      margin-top 50px
+      margin-top 30px
       width 200px
       height 40px
       line-height 40px
@@ -124,13 +133,17 @@ body
       letter-spacing 1px
       border-radius 3px
       cursor pointer
-      transition all .2s
+      transition all .3s
       text-transform uppercase
       .fa
         font-size 16px
         margin-right 15px
       &:hover
         background-color rgba(0,0,0,1)
+    .credit
+      font-size 12px
+      margin-top 40px
+      text-align center
 
 .desc-subtitle
   absolute top 0 left 0
