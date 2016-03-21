@@ -30,40 +30,32 @@ upperBoundMonth = 0
 lowerBoundYear = 0
 lowerBoundMonth = 0
 
-fetchImgFromLocal = (month, date, commits, cb) ->
-  arr = Util.shuffle(photos[month][date])[0...commits]
+fetchImgFromLocal = (year, month, date, commits, cb) ->
+  arr = Util.shuffle(photos[year][month][date])[0...commits]
   cb arr.map (e) ->
     {desc: e.desc, url: e.urls[e.urls.length-1], sUrl: e.urls[0]}
 
-getImgByDate = (month, date, commits, location, cb) ->
+getImgByDate = (year, month, date, commits, location, cb) ->
   if commits is 0
     cb []
     return
 
-  if photos[month]? and photos[month][date]?
-    fetchImgFromLocal month, date, commits, cb
+  if photos[year]? and photos[year][month]? and photos[year][month][date]?
+    fetchImgFromLocal year, month, date, commits, cb
     return
 
-  photoRef = new Firebase "#{FIREBASE_URL}photos/#{month}-#{date}"
-
-  photoRef.once 'value', (e) ->
-    resArray = []
-    val = e.val()
-    for k, v of val
-      resArray.push v
-
-    photos[month] ||= []
-    photos[month][date] = resArray || []
-
-    # fake data if not available on flickr
-    if photos[month][date].length is 0
-      retArr = Util.arr commits, () ->
-        str = "./assets/images/insta_data/img_#{~~(Math.random()*9)}.jpg"
-        urls: [str, str]
-        desc: 'This is ART!' # 233
-      photos[month][date] = retArr
-
-    fetchImgFromLocal month, date, commits, cb
+  $.post
+    url: '/api/wyvmwyac/firebase'
+    data:
+      year: year
+      month: month
+      date: date
+    dataType: 'json'
+    success: (e) ->
+      photos[year] ||= []
+      photos[year][month] || =[]
+      photos[year][month][date] = e || []
+      fetchImgFromLocal year, month, date, commits, cb
 
 prepareUserData = (data) ->
   daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31]
@@ -150,7 +142,8 @@ $ () ->
       if error
         alert "Login Failed!", error
       else
-        # console.log authData
+        # avatar
+        # authData.github.profileImageURL
 
         # HERE: replace firebase with custom server
         # dataRef = new Firebase "#{FIREBASE_URL}#{authData.github.username}"
@@ -189,7 +182,7 @@ refreshUIByMonth = (curMonth, curYear) ->
   maxImgPerDay = ~~(yLen / (IMG_SIZE + yItv))
 
   [0...daysInCurMonth].forEach (i) ->
-    getImgByDate curMonth, i+1, commitsInDay[i], 'NY', (imgForToday) ->
+    getImgByDate curYear, curMonth, i+1, commitsInDay[i], 'NY', (imgForToday) ->
       [0...Math.min(commitsInDay[i], maxImgPerDay)].forEach (j) ->
         keywords = imgForToday[j].desc.split(" ")
         if keywords.length is 1
