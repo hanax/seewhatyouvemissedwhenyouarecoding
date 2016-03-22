@@ -51,6 +51,7 @@ getImgByDate = (year, month, date, commits, location, cb) ->
       year: year
       month: month
       date: date
+      count: commits
     dataType: 'json'
     success: (e) ->
       photos[year] ||= []
@@ -184,7 +185,14 @@ refreshUIByMonth = (curMonth, curYear) ->
 
   [0...daysInCurMonth].forEach (i) ->
     getImgByDate curYear, curMonth, i+1, commitsInDay[i], 'NY', (imgForToday) ->
-      [0...Math.min(commitsInDay[i], maxImgPerDay)].forEach (j) ->
+      commitsNum = Math.min(commitsInDay[i], maxImgPerDay)
+      if imgForToday.length < commitsNum
+        slack = commitsNum - imgForToday
+        local = Util.arr slack, ->
+          url = "./assets/images/insta_data/img_#{~~(Math.random()*10)}.jpg"
+          {desc:'This is art!',sUrl: url,url: url}
+        imgForToday = imgForToday.concat local
+      [0...commitsNum].forEach (j) ->
         keywords = imgForToday[j].desc.split(" ")
         if keywords.length is 1
           keywords = imgForToday[j].desc.split("#")
